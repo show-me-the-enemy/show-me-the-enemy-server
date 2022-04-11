@@ -1,1 +1,9 @@
-
+# 스프링 부트에서는 기본적으로 실행 시 resource 폴더에서 application.yml을 찾아서 로드한다.
+#   - 공통으로 사용할 설정 값을 지정하거나 기본값(local)을 설정하고 profile 값이 있다면 다음 설정 파일에서 오버라이드해서 사용할 수 있다.
+#   - 이번 프로젝트에서는 dev 와 prod 두 가지로 분리할 것이기 때문에, dev를 기본 값으로 설정한다.
+spring:
+  profiles:
+    default: dev
+  output:
+    ansi:
+      enabled: always

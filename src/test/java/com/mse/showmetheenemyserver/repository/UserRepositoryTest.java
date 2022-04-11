@@ -15,11 +15,6 @@ class UserRepositoryTest {
     @Autowired
     UserRepository userRepository;
 
-//    @AfterEach
-//    public void cleanup() {
-//        userRepository.deleteAll();
-//    }
-
     @Test
     public void 유저저장_불러오기() {
         //given
