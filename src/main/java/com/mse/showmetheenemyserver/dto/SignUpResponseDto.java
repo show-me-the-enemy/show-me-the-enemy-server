@@ -9,9 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SignUpResponseDto {
 
+    private int statusCode;
     private String username;
 
-    public SignUpResponseDto(User entity) {
+    public SignUpResponseDto(int statusCode, User entity) {
+        this.statusCode = statusCode;
         this.username = entity.getUsername();
     }
 }

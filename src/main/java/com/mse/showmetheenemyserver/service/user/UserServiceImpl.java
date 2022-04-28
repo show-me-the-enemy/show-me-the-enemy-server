@@ -15,13 +15,6 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-
-    @Override
-    public User getUser(String username) {
-        log.info("Fetching user {}", username);
-        return userRepository.findByUsername(username);
-    }
-
     @Override
     public List<User> getUsers() {
         log.info("Fetching all users");

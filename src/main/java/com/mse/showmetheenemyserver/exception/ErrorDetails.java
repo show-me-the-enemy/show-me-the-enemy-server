@@ -1,20 +1,17 @@
 package com.mse.showmetheenemyserver.exception;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 @Data
 public class ErrorDetails {
-    private LocalDateTime timestamp;
+    private int statusCode;
     private String message;
     private String details;
 
     @Builder
-    public ErrorDetails(LocalDateTime timestamp, String message, String details) {
-        this.timestamp = timestamp;
+    public ErrorDetails(int statusCode, String message, String details) {
+        this.statusCode = statusCode;
         this.message = message;
         this.details = details;
     }

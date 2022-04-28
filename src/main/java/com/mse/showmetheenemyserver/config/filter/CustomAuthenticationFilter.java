@@ -7,8 +7,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mse.showmetheenemyserver.dto.LoginResponseDto;
 import com.mse.showmetheenemyserver.exception.ErrorDetails;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -20,9 +20,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Date;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
@@ -66,16 +68,15 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         log.info("Send token '{}' in http response body to the client", accessToken);
 
-        /*response.setHeader("access-token", accessToken);
-        response.setHeader("refresh-token", refreshToken);*/
         LoginResponseDto loginResponseDto = LoginResponseDto.builder()
+                .statusCode(CREATED.value())
                 .message(user.getUsername() + " is logged in correct")
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
 
         response.setContentType(APPLICATION_JSON_VALUE);
-        response.setStatus(HttpStatus.CREATED.value());
+        response.setStatus(CREATED.value());
 
         new ObjectMapper().writeValue(response.getOutputStream(), loginResponseDto);
     }
@@ -83,14 +84,24 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         response.setContentType(APPLICATION_JSON_VALUE);
-        response.setStatus(HttpStatus.BAD_REQUEST.value());
+        response.setStatus(BAD_REQUEST.value());
 
-        ErrorDetails error = ErrorDetails.builder()
-                .timestamp(LocalDateTime.now())
-                .message(request.getParameter("username") + " is not an user")
-                .details(request.getRequestURI())
-                .build();
+        ErrorDetails error;
 
+        if (failed instanceof BadCredentialsException) {
+            log.info("Invalid username or password");
+            error = ErrorDetails.builder()
+                    .statusCode(BAD_REQUEST.value())
+                    .message("Invalid username or password")
+                    .details(request.getRequestURI())
+                    .build();
+        } else {
+            error = ErrorDetails.builder()
+                    .statusCode(INTERNAL_SERVER_ERROR.value())
+                    .message("An unknown error has occurred")
+                    .details(request.getRequestURI())
+                    .build();
+        }
         new ObjectMapper().registerModule(new JavaTimeModule()).writeValue(response.getOutputStream(), error);
     }
 }

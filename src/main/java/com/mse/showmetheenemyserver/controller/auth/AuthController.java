@@ -3,7 +3,6 @@ package com.mse.showmetheenemyserver.controller.auth;
 import com.mse.showmetheenemyserver.dto.SignUpRequestDto;
 import com.mse.showmetheenemyserver.dto.SignUpResponseDto;
 import com.mse.showmetheenemyserver.service.auth.AuthService;
-import com.mse.showmetheenemyserver.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

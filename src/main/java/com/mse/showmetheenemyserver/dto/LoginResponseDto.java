@@ -8,12 +8,15 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LoginResponseDto {
+
+    private int statusCode;
     private String message;
     private String accessToken;
     private String refreshToken;
 
     @Builder
-    public LoginResponseDto(String message, String accessToken, String refreshToken) {
+    public LoginResponseDto(int statusCode, String message, String accessToken, String refreshToken) {
+        this.statusCode = statusCode;
         this.message = message;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
