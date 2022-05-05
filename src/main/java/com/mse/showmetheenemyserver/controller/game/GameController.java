@@ -27,7 +27,7 @@ import java.net.URI;
 public class GameController {
 
     private final GameService gameService;
-    private final SimpMessagingTemplate template;
+    private final SimpMessagingTemplate template; // Broker로 메시지를 전달하는 객체
 
     @PostMapping("/start/{username}")
     public ResponseEntity<GameResponseDto> start(@PathVariable String username) {
@@ -41,11 +41,11 @@ public class GameController {
         return ResponseEntity.created(uri).body(gameService.connectToRandomGame(username));
     }
 
-    @PostMapping("/play")
+    @MessageMapping("/play")
     public ResponseEntity<GameResponseDto> gamePlay(@RequestBody GameRequestDto requestDto) {
         log.info("gameplay: {}", requestDto);
         Game game = gameService.gamePlay(requestDto);
-        template.convertAndSend("/sub/game-progress/" + requestDto.getId(), game);
+        template.convertAndSend("/sub/games/" + requestDto.getId(), game);
         return ResponseEntity.ok(GameResponseDto.builder()
                 .statusCode(HttpStatus.OK.value())
                 .entity(game)

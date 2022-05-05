@@ -45,16 +45,4 @@ public class Game {
     public void changeGameStatus(GameStatus status) {
         this.status = status;
     }
-
-//    public void handleActions(WebSocketSession session, GameMessage gameMessage, GameService gameService) {
-//        if (gameMessage.getType().equals(GameMessage.MessageType.ENTER)) {
-//            sessions.add(session);
-//            gameMessage.setMessage(gameMessage.getSender() + "님이 입장했습니다.");
-//        }
-//        sendMessage(gameMessage, gameService);
-//    }
-//
-//    public <T> void sendMessage(T message, GameService gameService) {
-//        sessions.parallelStream().forEach(session -> gameService.sendMessage(session, message));
-//    }
 }

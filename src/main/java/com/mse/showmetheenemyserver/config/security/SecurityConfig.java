@@ -40,9 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // authorization-related settings
         http.authorizeRequests().antMatchers(POST, "/api/auth/**").permitAll();
-        http.authorizeRequests().antMatchers(GET, "/api/users/**");
         http.authorizeRequests().antMatchers(POST, "/api/game/**").permitAll();
-        http.authorizeRequests().antMatchers(GET, "/play/**").permitAll();
+        http.authorizeRequests().antMatchers(GET, "/ws-gameplay/**").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
