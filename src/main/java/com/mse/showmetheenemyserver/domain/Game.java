@@ -29,7 +29,6 @@ public class Game {
     private String secondUsername;
     @Enumerated(value = EnumType.STRING)
     private GameStatus status;
-//    private final Set<WebSocketSession> sessions = new HashSet<>();
 
     @Builder
     public Game(String firstUsername, String secondUsername, GameStatus status) {

@@ -40,7 +40,7 @@ public class GameService {
 //    }
 
     @Transactional
-    public GameResponseDto createRoom(String username) {
+    public GameResponseDto createGame(String username) {
 
         Game newGame = Game.builder()
                 .firstUsername(username)
@@ -60,7 +60,7 @@ public class GameService {
                 .flatMap(games -> games.stream().findFirst())
                 .orElseThrow(GameNotFoundException::new);
 
-        log.info("Connect {} into the game{}", username, newGame.getId());
+        log.info("Connect {} into the game {}", username, newGame.getId());
         newGame.connectSecondUser(username);
         newGame.changeGameStatus(IN_PROGRESS);
 

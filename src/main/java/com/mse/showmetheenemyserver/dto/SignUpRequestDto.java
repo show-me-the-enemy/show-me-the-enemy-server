@@ -32,11 +32,7 @@ public class SignUpRequestDto {
     }
 
     public boolean isDifferentTwoPassword() {
-        if (password.equals(matchingPassword)) {
-            return false;
-        }
-
-        return true;
+        return !password.equals(matchingPassword);
     }
 
     public User toEntity() {

@@ -6,7 +6,6 @@ import com.mse.showmetheenemyserver.dto.GameResponseDto;
 import com.mse.showmetheenemyserver.service.game.GameService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -22,7 +21,7 @@ import java.net.URI;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/game")
+@RequestMapping("/api/games")
 @RestController
 public class GameController {
 
@@ -31,24 +30,25 @@ public class GameController {
 
     @PostMapping("/start/{username}")
     public ResponseEntity<GameResponseDto> start(@PathVariable String username) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/game/start/" + username).toUriString());
-        return ResponseEntity.created(uri).body(gameService.createRoom(username));
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/games/start/" + username).toUriString());
+        return ResponseEntity.created(uri).body(gameService.createGame(username));
     }
 
     @PostMapping("/connect/random/{username}")
-    public ResponseEntity<GameResponseDto> connect(@PathVariable String username) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/game/connect/random/" + username).toUriString());
-        return ResponseEntity.created(uri).body(gameService.connectToRandomGame(username));
+    public ResponseEntity<GameResponseDto> connectToRandomGame(@PathVariable String username) {
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/games/connect/random/" + username).toUriString());
+
+        GameResponseDto responseDto = gameService.connectToRandomGame(username);
+        log.info("Notify game {} subscribers that {} has participated in the game", responseDto.getId(), responseDto.getSecondUsername());
+        template.convertAndSend("/sub/games/" + responseDto.getId(), responseDto);
+
+        return ResponseEntity.created(uri).body(responseDto);
     }
 
     @MessageMapping("/play")
-    public ResponseEntity<GameResponseDto> gamePlay(@RequestBody GameRequestDto requestDto) {
+    public void gameplay(@RequestBody GameRequestDto requestDto) {
         log.info("gameplay: {}", requestDto);
         Game game = gameService.gamePlay(requestDto);
-        template.convertAndSend("/sub/games/" + requestDto.getId(), game);
-        return ResponseEntity.ok(GameResponseDto.builder()
-                .statusCode(HttpStatus.OK.value())
-                .entity(game)
-                .build());
+        template.convertAndSend("/sub/games/" + requestDto.getId(), requestDto);
     }
 }
