@@ -8,6 +8,7 @@ import com.mse.showmetheenemyserver.exception.GameNotFoundException;
 import com.mse.showmetheenemyserver.repository.GameRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +22,6 @@ import static org.springframework.http.HttpStatus.CREATED;
 @Transactional(readOnly = true)
 @Service
 public class GameService {
-
-    private final ObjectMapper objectMapper;
 
     private final GameRepository gameRepository;
 
@@ -38,6 +37,12 @@ public class GameService {
 //    public ChatRoom findRoomById(String roomId) {
 //        return chatRooms.get(roomId);
 //    }
+
+    @Transactional
+    public void deleteAll() {
+        log.info("Delete all games in the database");
+        gameRepository.deleteAll();
+    }
 
     @Transactional
     public GameResponseDto createGame(String username) {
@@ -74,12 +79,4 @@ public class GameService {
 
         return game;
     }
-
-//    public <T> void sendMessage(WebSocketSession session, T message) {
-//        try {
-//            session.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
-//        } catch (IOException e) {
-//            log.error(e.getMessage(), e);
-//        }
-//    }
 }
