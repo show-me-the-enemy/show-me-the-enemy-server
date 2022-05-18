@@ -34,10 +34,6 @@ public class GameService {
         return gameRepository.findAll();
     }
 
-//    public ChatRoom findRoomById(String roomId) {
-//        return chatRooms.get(roomId);
-//    }
-
     @Transactional
     public void deleteAll() {
         log.info("Delete all games in the database");
@@ -70,13 +66,5 @@ public class GameService {
         newGame.changeGameStatus(IN_PROGRESS);
 
         return new GameResponseDto(CREATED.value(), newGame);
-    }
-
-    public Game gamePlay(GameRequestDto requestDto) {
-        Game game = gameRepository.findById(requestDto.getId()).orElseThrow(GameNotFoundException::new);
-
-        // TODO: FINISH 체크
-
-        return game;
     }
 }
