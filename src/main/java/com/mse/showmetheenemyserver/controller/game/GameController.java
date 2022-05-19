@@ -1,5 +1,6 @@
 package com.mse.showmetheenemyserver.controller.game;
 
+import com.mse.showmetheenemyserver.domain.GameStatus;
 import com.mse.showmetheenemyserver.dto.BuildUpResponseDto;
 import com.mse.showmetheenemyserver.dto.GameResponseDto;
 import com.mse.showmetheenemyserver.service.game.GameService;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Slf4j
@@ -39,7 +42,9 @@ public class GameController {
 
         GameResponseDto responseDto = gameService.connectToRandomGame(username);
         log.info("Notify game number {} subscribers that {} has participated in the game", responseDto.getId(), responseDto.getSecondUsername());
-        template.convertAndSend("/sub/games/" + responseDto.getId(), responseDto);
+        Map<String,Object> headers = new HashMap<String,Object>();
+        headers.put("GameStatus", GameStatus.NEW);
+        template.convertAndSend("/sub/games/" + responseDto.getId(), responseDto, headers);
 
         return ResponseEntity.created(uri).body(responseDto);
     }
@@ -62,8 +67,9 @@ public class GameController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteByGameId(@PathVariable Long id) {
+    public ResponseEntity deleteByGameId(@PathVariable Long id) {
         gameService.delete(id);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping()
