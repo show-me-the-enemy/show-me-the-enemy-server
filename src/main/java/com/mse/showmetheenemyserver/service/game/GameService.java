@@ -6,10 +6,13 @@ import com.mse.showmetheenemyserver.exception.GameNotFoundException;
 import com.mse.showmetheenemyserver.repository.GameRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.mse.showmetheenemyserver.domain.GameStatus.FINISHED;
 import static com.mse.showmetheenemyserver.domain.GameStatus.IN_PROGRESS;
@@ -23,6 +26,8 @@ import static org.springframework.http.HttpStatus.OK;
 @Service
 public class GameService {
     private final GameRepository gameRepository;
+
+    private SimpMessageHeaderAccessor accessor;
 
     public Game findGameById(Long id) {
         log.info("find game '{}'", id);
@@ -82,5 +87,11 @@ public class GameService {
     public void delete(Long id) {
         log.info("Delete game '{}' in the database", id);
         gameRepository.deleteById(id);
+    }
+
+    public Map<String, Object> headers(String status){
+        Map<String, Object> header = new HashMap<>();
+        header.put("game-status", status);
+        return header;
     }
 }

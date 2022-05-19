@@ -6,6 +6,7 @@ import com.mse.showmetheenemyserver.dto.BuildUpRequestDto;
 import com.mse.showmetheenemyserver.dto.BuildUpResponseDto;
 import com.mse.showmetheenemyserver.exception.GameNotFoundException;
 import com.mse.showmetheenemyserver.repository.GameRepository;
+import com.mse.showmetheenemyserver.service.game.GameService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -25,7 +26,8 @@ public class StompGameController {
 
     private final SimpMessagingTemplate template;
     private final GameRepository gameRepository;
-    private SimpMessageHeaderAccessor accessor;
+
+    private final GameService gameService;
 
     @MessageMapping("/build-up")
     public void buildUp(@RequestBody BuildUpRequestDto requestDto) {
@@ -42,7 +44,6 @@ public class StompGameController {
                 .numMonsters(requestDto.getNumMonsters())
                 .numItem(requestDto.getNumItem())
                 .build();
-        accessor.setHeader("game-status", "buildup");
-        template.convertAndSend("/sub/games/" + requestDto.getId(), buildUpResponseDto, accessor.toMap());
+        template.convertAndSend("/sub/games/" + requestDto.getId(), buildUpResponseDto, gameService.headers("buildup"));
     }
 }

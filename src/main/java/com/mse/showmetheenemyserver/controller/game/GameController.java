@@ -31,7 +31,7 @@ public class GameController {
 
     private final GameService gameService;
     private final SimpMessagingTemplate template; // Broker로 메시지를 전달하는 객체
-    private SimpMessageHeaderAccessor accessor;
+
     @PostMapping("/start/{username}")
     public ResponseEntity<GameResponseDto> start(@PathVariable String username) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/games/start/" + username).toUriString());
@@ -44,8 +44,8 @@ public class GameController {
 
         GameResponseDto responseDto = gameService.connectToRandomGame(username);
         log.info("Notify game number {} subscribers that {} has participated in the game", responseDto.getId(), responseDto.getSecondUsername());
-        accessor.setHeader("game-status", "start");
-        template.convertAndSend("/sub/games/" + responseDto.getId(), responseDto,  accessor.toMap());
+
+        template.convertAndSend("/sub/games/" + responseDto.getId(), responseDto,  gameService.headers("start"));
 
         return ResponseEntity.created(uri).body(responseDto);
     }
