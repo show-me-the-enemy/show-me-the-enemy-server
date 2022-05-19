@@ -7,6 +7,8 @@ import com.mse.showmetheenemyserver.service.game.GameService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.core.MessagePostProcessor;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +31,7 @@ public class GameController {
 
     private final GameService gameService;
     private final SimpMessagingTemplate template; // Broker로 메시지를 전달하는 객체
-
+    private SimpMessageHeaderAccessor accessor;
     @PostMapping("/start/{username}")
     public ResponseEntity<GameResponseDto> start(@PathVariable String username) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/games/start/" + username).toUriString());
@@ -42,9 +44,8 @@ public class GameController {
 
         GameResponseDto responseDto = gameService.connectToRandomGame(username);
         log.info("Notify game number {} subscribers that {} has participated in the game", responseDto.getId(), responseDto.getSecondUsername());
-        Map<String,Object> headers = new HashMap<String,Object>();
-        headers.put("GameStatus", GameStatus.NEW);
-        template.convertAndSend("/sub/games/" + responseDto.getId(), responseDto, headers);
+        accessor.setHeader("game-status", "start");
+        template.convertAndSend("/sub/games/" + responseDto.getId(), responseDto,  accessor.toMap());
 
         return ResponseEntity.created(uri).body(responseDto);
     }

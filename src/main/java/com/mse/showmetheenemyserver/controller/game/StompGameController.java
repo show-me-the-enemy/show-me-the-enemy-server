@@ -1,6 +1,7 @@
 package com.mse.showmetheenemyserver.controller.game;
 
 import com.mse.showmetheenemyserver.domain.Game;
+import com.mse.showmetheenemyserver.domain.GameStatus;
 import com.mse.showmetheenemyserver.dto.BuildUpRequestDto;
 import com.mse.showmetheenemyserver.dto.BuildUpResponseDto;
 import com.mse.showmetheenemyserver.exception.GameNotFoundException;
@@ -8,10 +9,13 @@ import com.mse.showmetheenemyserver.repository.GameRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -21,6 +25,7 @@ public class StompGameController {
 
     private final SimpMessagingTemplate template;
     private final GameRepository gameRepository;
+    private SimpMessageHeaderAccessor accessor;
 
     @MessageMapping("/build-up")
     public void buildUp(@RequestBody BuildUpRequestDto requestDto) {
@@ -37,6 +42,7 @@ public class StompGameController {
                 .numMonsters(requestDto.getNumMonsters())
                 .numItem(requestDto.getNumItem())
                 .build();
-        template.convertAndSend("/sub/games/" + requestDto.getId(), buildUpResponseDto);
+        accessor.setHeader("game-status", "buildup");
+        template.convertAndSend("/sub/games/" + requestDto.getId(), buildUpResponseDto, accessor.toMap());
     }
 }
