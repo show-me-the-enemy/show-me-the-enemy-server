@@ -1,5 +1,6 @@
 package com.mse.showmetheenemyserver.controller.game;
 
+import com.mse.showmetheenemyserver.dto.BuildUpResponseDto;
 import com.mse.showmetheenemyserver.dto.GameResponseDto;
 import com.mse.showmetheenemyserver.service.game.GameService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -40,6 +42,28 @@ public class GameController {
         template.convertAndSend("/sub/games/" + responseDto.getId(), responseDto);
 
         return ResponseEntity.created(uri).body(responseDto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<GameResponseDto> updateGameStatusToFinished(@PathVariable Long id) {
+        log.info("Game '{}' is over so that change status to FINISHED", id);
+        GameResponseDto gameResponseDto = gameService.updateGameStatusToFinished(id);
+        template.convertAndSend(
+                "/sub/games/" + id,
+                BuildUpResponseDto.builder()
+                        .sender("ADMIN")
+                        .status(gameResponseDto.getStatus())
+                        .numMonsters(0)
+                        .numItem(0)
+                        .build()
+        );
+
+        return ResponseEntity.ok(gameResponseDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteByGameId(@PathVariable Long id) {
+        gameService.delete(id);
     }
 
     @DeleteMapping()

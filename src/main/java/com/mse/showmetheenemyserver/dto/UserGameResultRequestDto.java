@@ -6,13 +6,15 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BuildUpRequestDto {
+public class UserGameResultRequestDto {
 
-    private Long id;
+    Long gameId;
 
-    private String sender;
+    String username;
 
-    private Integer numMonsters;
+    Integer numRound;
 
-    private Integer numItem;
+    Integer crystal;
+
+    Boolean won;
 }
