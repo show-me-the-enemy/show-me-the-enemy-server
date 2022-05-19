@@ -61,7 +61,8 @@ public class GameController {
                         .status(gameResponseDto.getStatus())
                         .numMonsters(0)
                         .numItem(0)
-                        .build()
+                        .build(),
+                gameService.headers("finish")
         );
 
         return ResponseEntity.ok(gameResponseDto);
