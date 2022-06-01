@@ -1,6 +1,7 @@
 package com.mse.showmetheenemyserver.service.user;
 
 import com.mse.showmetheenemyserver.domain.User;
+import com.mse.showmetheenemyserver.dto.LobbyResponseDto;
 import com.mse.showmetheenemyserver.dto.UserGameResultRequestDto;
 import com.mse.showmetheenemyserver.dto.UserGameResultResponseDto;
 import com.mse.showmetheenemyserver.repository.UserRepository;
@@ -9,9 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
-
 import static org.springframework.http.HttpStatus.OK;
 
 @Slf4j
@@ -31,6 +30,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUser(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public LobbyResponseDto getLobbyStatus(Long id) {
+        User user = userRepository.getById(id);
+        return LobbyResponseDto.builder()
+                .statusCode(OK.value())
+                .entity(user)
+                .build();
+
+
     }
 
     @Transactional

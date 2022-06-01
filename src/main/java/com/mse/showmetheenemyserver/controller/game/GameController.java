@@ -1,26 +1,17 @@
 package com.mse.showmetheenemyserver.controller.game;
 
-import com.mse.showmetheenemyserver.domain.GameStatus;
+
 import com.mse.showmetheenemyserver.dto.BuildUpResponseDto;
 import com.mse.showmetheenemyserver.dto.GameResponseDto;
 import com.mse.showmetheenemyserver.service.game.GameService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.core.MessagePostProcessor;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 
 @Slf4j
@@ -78,4 +69,5 @@ public class GameController {
     public void deleteAll() {
         gameService.deleteAll();
     }
+
 }
