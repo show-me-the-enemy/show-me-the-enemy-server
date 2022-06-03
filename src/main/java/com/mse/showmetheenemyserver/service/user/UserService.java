@@ -2,6 +2,7 @@ package com.mse.showmetheenemyserver.service.user;
 
 import com.mse.showmetheenemyserver.domain.User;
 import com.mse.showmetheenemyserver.dto.LobbyResponseDto;
+import com.mse.showmetheenemyserver.dto.RankingInfoDto;
 import com.mse.showmetheenemyserver.dto.UserGameResultRequestDto;
 import com.mse.showmetheenemyserver.dto.UserGameResultResponseDto;
 
@@ -12,5 +13,6 @@ public interface UserService {
     User getUser(String username);
     UserGameResultResponseDto updateUserGameResult(UserGameResultRequestDto requestDto);
 
-    public LobbyResponseDto getLobbyStatus(String username);
+    LobbyResponseDto getLobbyStatus(String username);
+    List<RankingInfoDto> getTopTenUsers();
 }

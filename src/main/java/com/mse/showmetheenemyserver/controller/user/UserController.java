@@ -2,6 +2,7 @@ package com.mse.showmetheenemyserver.controller.user;
 
 import com.mse.showmetheenemyserver.domain.User;
 import com.mse.showmetheenemyserver.dto.LobbyResponseDto;
+import com.mse.showmetheenemyserver.dto.RankingInfoDto;
 import com.mse.showmetheenemyserver.dto.UserGameResultRequestDto;
 import com.mse.showmetheenemyserver.dto.UserGameResultResponseDto;
 import com.mse.showmetheenemyserver.service.user.UserService;
@@ -19,7 +20,6 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    // 회원 전체조회
     @GetMapping()
     public ResponseEntity<List<User>> getUsers() {
         return ResponseEntity.ok(userService.getUsers());
@@ -32,8 +32,13 @@ public class UserController {
     }
 
     @GetMapping("/lobby/{username}")
-    public ResponseEntity<LobbyResponseDto> getUserLobbyProperty(@PathVariable String username){
+    public ResponseEntity<LobbyResponseDto> getUserLobbyProperty(@PathVariable String username) {
 
         return ResponseEntity.ok(userService.getLobbyStatus(username));
+    }
+
+    @GetMapping("/rankings")
+    public ResponseEntity<List<RankingInfoDto>> getUsersByRanking() {
+        return ResponseEntity.ok(userService.getTopTenUsers());
     }
 }

@@ -2,6 +2,7 @@ package com.mse.showmetheenemyserver.service.user;
 
 import com.mse.showmetheenemyserver.domain.User;
 import com.mse.showmetheenemyserver.dto.LobbyResponseDto;
+import com.mse.showmetheenemyserver.dto.RankingInfoDto;
 import com.mse.showmetheenemyserver.dto.UserGameResultRequestDto;
 import com.mse.showmetheenemyserver.dto.UserGameResultResponseDto;
 import com.mse.showmetheenemyserver.repository.UserRepository;
@@ -10,7 +11,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 import java.util.List;
+
 import static org.springframework.http.HttpStatus.OK;
 
 @Slf4j
@@ -39,8 +43,6 @@ public class UserServiceImpl implements UserService {
                 .statusCode(OK.value())
                 .entity(user)
                 .build();
-
-
     }
 
     @Transactional
@@ -60,5 +62,19 @@ public class UserServiceImpl implements UserService {
                 .statusCode(OK.value())
                 .entity(user)
                 .build();
+    }
+
+    @Override
+    public List<RankingInfoDto> getTopTenUsers() {
+        List<Object[]> usersByNumWinsDesc = userRepository.findUsersByNumWinsDesc();
+        List<RankingInfoDto> topTenUsers = new ArrayList<>();
+
+        for (Object[] user : usersByNumWinsDesc) {
+            RankingInfoDto dto = RankingInfoDto.builder().user(user).build();
+            topTenUsers.add(dto);
+            if (topTenUsers.size() == 10) break;
+        }
+
+        return topTenUsers;
     }
 }
