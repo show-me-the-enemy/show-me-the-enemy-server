@@ -33,8 +33,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public LobbyResponseDto getLobbyStatus(Long id) {
-        User user = userRepository.getById(id);
+    public LobbyResponseDto getLobbyStatus(String username) {
+        User user = userRepository.findByUsername(username);
         return LobbyResponseDto.builder()
                 .statusCode(OK.value())
                 .entity(user)

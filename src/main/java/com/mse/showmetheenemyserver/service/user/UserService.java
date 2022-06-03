@@ -12,5 +12,5 @@ public interface UserService {
     User getUser(String username);
     UserGameResultResponseDto updateUserGameResult(UserGameResultRequestDto requestDto);
 
-    public LobbyResponseDto getLobbyStatus(Long id);
+    public LobbyResponseDto getLobbyStatus(String username);
 }

@@ -31,9 +31,9 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUserGameResult(requestDto));
     }
 
-    @GetMapping("/lobby/{id}")
-    public ResponseEntity<LobbyResponseDto> getUserLobbyProperty(@PathVariable Long id){
+    @GetMapping("/lobby/{username}")
+    public ResponseEntity<LobbyResponseDto> getUserLobbyProperty(@PathVariable String username){
 
-        return ResponseEntity.ok(userService.getLobbyStatus(id));
+        return ResponseEntity.ok(userService.getLobbyStatus(username));
     }
 }
