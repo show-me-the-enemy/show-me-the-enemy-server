@@ -14,15 +14,18 @@ public class BuildUpResponseDto {
 
     private GameStatus status;
 
-    private Integer numMonsters;
+    private String type;
 
-    private Integer numItem;
+    private String name;
+
+    private Integer count;
 
     @Builder
-    public BuildUpResponseDto(String sender, GameStatus status, Integer numMonsters, Integer numItem) {
+    public BuildUpResponseDto(String sender, GameStatus status, String type, String name, Integer count) {
         this.sender = sender;
         this.status = status;
-        this.numMonsters = numMonsters;
-        this.numItem = numItem;
+        this.type = type;
+        this.name = name;
+        this.count = count;
     }
 }

@@ -12,7 +12,9 @@ public class BuildUpRequestDto {
 
     private String sender;
 
-    private Integer numMonsters;
+    private String type;
 
-    private Integer numItem;
+    private String name;
+
+    private Integer count;
 }

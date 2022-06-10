@@ -50,8 +50,9 @@ public class GameController {
                 BuildUpResponseDto.builder()
                         .sender("ADMIN")
                         .status(gameResponseDto.getStatus())
-                        .numMonsters(0)
-                        .numItem(0)
+                        .type("")
+                        .name("")
+                        .count(0)
                         .build(),
                 gameService.headers("finish")
         );
