@@ -71,7 +71,7 @@ public class GameService {
 
     @Transactional
     public GameResponseDto connectToRandomGame(String username) {
-        log.info("Find newly created games.");
+        log.info("'{}' Find newly created games.", username);
         Game newGame = gameRepository.findAllNewGames()
                 .flatMap(games -> games.stream().findFirst())
                 .orElseThrow(GameNotFoundException::new);

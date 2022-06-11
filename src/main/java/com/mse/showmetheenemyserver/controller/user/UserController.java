@@ -33,12 +33,13 @@ public class UserController {
 
     @GetMapping("/lobby/{username}")
     public ResponseEntity<LobbyResponseDto> getUserLobbyProperty(@PathVariable String username) {
-
+        log.info("Get {}'s game stats like crystals, numWins", username);
         return ResponseEntity.ok(userService.getLobbyStatus(username));
     }
 
     @GetMapping("/rankings")
     public ResponseEntity<List<RankingInfoDto>> getUsersByRanking() {
+        log.info("Get top 10 users ranking");
         return ResponseEntity.ok(userService.getTopTenUsers());
     }
 }
