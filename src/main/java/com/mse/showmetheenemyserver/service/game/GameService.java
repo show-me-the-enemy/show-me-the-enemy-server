@@ -30,7 +30,6 @@ public class GameService {
     private SimpMessageHeaderAccessor accessor;
 
     public Game findGameById(Long id) {
-        log.info("find game '{}'", id);
         return gameRepository.findById(id).orElseThrow(GameNotFoundException::new);
     }
 
