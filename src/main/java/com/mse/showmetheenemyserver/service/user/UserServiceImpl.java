@@ -6,7 +6,6 @@ import com.mse.showmetheenemyserver.dto.RankingInfoDto;
 import com.mse.showmetheenemyserver.dto.UserGameResultRequestDto;
 import com.mse.showmetheenemyserver.dto.UserGameResultResponseDto;
 import com.mse.showmetheenemyserver.repository.UserRepository;
-import com.mse.showmetheenemyserver.service.game.GameService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,6 @@ import static org.springframework.http.HttpStatus.OK;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final GameService gameService;
 
     @Override
     public List<User> getUsers() {
@@ -47,8 +45,6 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public UserGameResultResponseDto updateUserGameResult(UserGameResultRequestDto requestDto) {
-        gameService.findGameById(requestDto.getGameId());
-
         User user = userRepository.findByUsername(requestDto.getUsername());
 
         // Only the winner updates the crystal and the number of wins

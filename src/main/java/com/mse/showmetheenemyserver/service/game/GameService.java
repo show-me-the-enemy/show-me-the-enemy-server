@@ -29,10 +29,6 @@ public class GameService {
 
     private SimpMessageHeaderAccessor accessor;
 
-    public Game findGameById(Long id) {
-        return gameRepository.findById(id).orElseThrow(GameNotFoundException::new);
-    }
-
     public List<Game> findAllGames() {
         return gameRepository.findAll();
     }
