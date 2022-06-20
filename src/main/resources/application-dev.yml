@@ -1,0 +1,17 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/showmethemonster
+    username: gwangjin
+    password: 1234
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true # 쿼리를 예쁘게 출력해준다.
+        dialect: org.hibernate.dialect.MariaDB106Dialect
+    hibernate:
+      ddl-auto: create # 앱 실행 시점에 테이블을 드랍하고 재생성
+    open-in-view: false
